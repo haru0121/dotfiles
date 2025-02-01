@@ -19,6 +19,8 @@
 !/.zsh/zkbd/**
 !/.zsh/zfunc/
 !/.zsh/zfunc/**
+!/.zsh/.zshrc
+!/.zsh/.zshenv
 !/.zsh/completion/
 /.zsh/completion/**
 !/.virc
@@ -61,8 +63,15 @@
 !/.gitignore_global
 !/.gitconfig_shared
 !/iterm2
+!/.tmux/.tmux.conf
+!/install.sh
 
 !/README.md
 !/LICENSE
 !.gitignore
 !.gitkeep
+!/.git_global
+!/.git_global/.gitconfig.template
+!/.git_global/.gitignore_global
+!/homebrew
+!/homebrew/.Brewfile
