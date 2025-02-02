@@ -11,17 +11,14 @@ xcode-select --install
 
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
 ```
 2. zinitインストール
 ```
 bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
-
 ```
 ```
 source ~/.zshrc
 zinit self-update
-
 ```
 
 ```
@@ -43,9 +40,9 @@ brew install starship
 gitconfig.templateをコピーしてgitユーザー設定を記入
 
 ```
-```
 ./install.sh
 ```
+
 （動かなければ実行権限の付与）
 ```
 chmod +x install.sh
