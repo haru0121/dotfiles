@@ -28,17 +28,23 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 ### End of Zinit's installer chunk
 
-# zinit
-# . "$ZDOTDIR/.zinit/bin/zinit.zsh"
 . "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
 zinit load hlissner/zsh-autopair
-zinit ice from"gh-r" as"command"
+# zinit ice from"gh-r" as"command"
 zinit load junegunn/fzf-bin
-zinit ice from"gh-r" as"command" mv"powerline-go-* -> powerline-go"
-zinit load justjanne/powerline-go
+# zinit ice from"gh-r" as"command" mv"powerline-go-* -> powerline-go"
+# zinit load justjanne/powerline-go
+# Load starship theme
+# line 1: `starship` binary as command, from github release
+# line 2: starship setup at clone(create init.zsh, completion)
+# line 3: pull behavior same as clone, source init.zsh
+zinit ice as"command" from"gh-r" \
+          atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+          atpull"%atclone" src"init.zsh"
+zinit light starship/starship
 zinit load momo-lab/zsh-abbrev-alias
 zinit load zsh-users/zsh-autosuggestions
 zinit load zsh-users/zsh-completions
@@ -49,50 +55,64 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 autoload -U compinit
 compinit -C
 
-# powerline
-if command -v powerline-go >/dev/null; then
-    zmodload zsh/datetime
+# Starshipがインストールされていない環境ではPowerLine-Goを使用する
+POWERLINE_GO_TERMS=("vscode" "Apple_Terminal")
+if printf "%s\n" "${POWERLINE_GO_TERMS[@]}" | grep -x "$TERM_PROGRAM" > /dev/null; then
+    FORCE_POWERLINE_GO=true
+fi
 
-    function preexec() {
-        __TIMER=$EPOCHREALTIME
-    }
+if [[ "$TERM_PROGRAM" = "Hyper" ]]; then
+    FORCE_POWERLINE_GO=true
+fi
 
-    function powerline_precmd() {
-        local __ERRCODE=$?
-        local __DURATION=0
+if [[ "${TERM}" = "linux" ]] || [[ "$TERM" = "xterm" ]]; then
+    export PROMPT='%B%F{red}%(?..%? )%f%b%B%F{red}%n%f%b@%m %B%40<..<%~%<< %b%# '
+elif which starship 2> /dev/null 1>&2 && [[ "${FORCE_POWERLINE_GO-""}" != true ]]; then
+    export STARSHIP_CONFIG=~/.config/starship.toml
+    eval "$(starship init zsh)"
+# elif command -v powerline-go >/dev/null; then
+#     zmodload zsh/datetime
 
-        if [ -n "$__TIMER" ]; then
-            local __ERT=$EPOCHREALTIME
-            __DURATION="$((__ERT - ${__TIMER:-__ERT}))"
-            __DURATION=${__DURATION%%.*} # floor
-            unset __TIMER
-        fi
+#     function preexec() {
+#         __TIMER=$EPOCHREALTIME
+#     }
 
-        eval "$(powerline-go \
-            -duration $__DURATION \
-            -error $__ERRCODE \
-            -eval \
-            -modules ssh,cwd,perms,jobs,exit \
-            -modules-right duration,git \
-            -numeric-exit-codes \
-            -path-aliases $'\~/Library/Mobile Documents/com~apple~CloudDocs=@iCloud' \
-            -shell zsh \
-        )"
-    }
+#     function powerline_precmd() {
+#         local __ERRCODE=$?
+#         local __DURATION=0
 
-    function install_powerline_precmd() {
-        for s in "${precmd_functions[@]}"
-        do
-            if [ "$s" = "powerline_precmd" ]; then
-                return
-            fi
-        done
-        precmd_functions+=(powerline_precmd)
-    }
+#         if [ -n "$__TIMER" ]; then
+#             local __ERT=$EPOCHREALTIME
+#             __DURATION="$((__ERT - ${__TIMER:-__ERT}))"
+#             __DURATION=${__DURATION%%.*} # floor
+#             unset __TIMER
+#         fi
 
-    if [ "$TERM" != "linux" ]; then
-        install_powerline_precmd
-    fi
+#         eval "$(powerline-go \
+#             -duration $__DURATION \
+#             -error $__ERRCODE \
+#             -eval \
+#             -modules ssh,cwd,perms,jobs,exit \
+#             -modules-right duration,git \
+#             -numeric-exit-codes \
+#             -path-aliases $'\~/Library/Mobile Documents/com~apple~CloudDocs=@iCloud' \
+#             -shell zsh \
+#         )"
+#     }
+
+#     function install_powerline_precmd() {
+#         for s in "${precmd_functions[@]}"
+#         do
+#             if [ "$s" = "powerline_precmd" ]; then
+#                 return
+#             fi
+#         done
+#         precmd_functions+=(powerline_precmd)
+#     }
+
+#     if [ "$TERM" != "linux" ]; then
+#         install_powerline_precmd
+#     fi
 fi
 
 # abbrev-alias

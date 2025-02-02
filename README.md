@@ -31,6 +31,14 @@ cd ~ && git clone https://github.com/haru0121/dotfiles.git <git clone dir>
 ```
 cd <git clone dir>
 ```
+2. tmuxインストール
+```
+brew install tmux
+```
+2. starshipインストール
+```
+brew install starship
+```
 3. シンボリックリンクを貼る
 gitconfig.templateをコピーしてgitユーザー設定を記入
 
@@ -45,6 +53,19 @@ chmod +x install.sh
 保存
 ```
 source ~/.zsh/.zshrc
+```
+
+```
+tmux
+```
+```
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 
+```
+```
+chmod +x ~/.tmux/plugins/tpm/tpm 
+```
+```
+tmux source-file ~/.tmux.conf
 ```
 4. homwbrewパッケージのインストール
 ```

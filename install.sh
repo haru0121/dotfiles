@@ -34,6 +34,9 @@ function main() {
 	ln -sfv $SCRIPT_DIR/.git_global/.gitignore_global	~/.gitignore_global
 	ln -sfv $SCRIPT_DIR/.git_global/.gitconfig	~/.gitconfig
 
+	# starship
+	ln -sfv $SCRIPT_DIR/starship/starship.toml ~/.config/starship.toml
+
 	print_info ""
 	print_info "#####################################################"
 	print_info "$(basename "${BASH_SOURCE[0]:-$0}") install finish!!!"

@@ -75,3 +75,5 @@
 !/.git_global/.gitignore_global
 !/homebrew
 !/homebrew/.Brewfile
+!/starship
+!/starship/starship.toml
